@@ -1,9 +1,14 @@
-gems = ''
-File.open('Gemfile', 'r') do |f|
-  f.each_line do |line|
-    gems << line unless (line.include? 'sqlite3') || (line.include? 'turbolinks')
+def remove_lines(file, words)
+  new_lines = ''
+  File.open(file, 'r') do |f|
+    f.each_line do |line|
+      new_lines << line unless words.any? { |word| line.include? word }
+    end
   end
+  new_lines
 end
+
+gems = remove_lines('Gemfile', ['sqlite3', 'turbolinks'])
 run 'rm Gemfile'
 run 'touch \'Gemfile\''
 File.open('Gemfile', 'w') { |file| file.write(gems) }
@@ -21,7 +26,7 @@ gem_group :development, :test do
   gem 'shoulda-matchers'
   gem 'rubocop'
 end
-run 'rm test'
+run 'rm -rf test'
 run 'bundle install'
 generate 'rspec:install'
 if yes?('Add devise?(yes/no)')
@@ -35,3 +40,8 @@ if yes?('Add devise?(yes/no)')
   rails_command 'db:migrate'
   generate 'devise:views'
 end
+
+scripts = remove_lines('app/assets/javascripts/application.js', ['turbolinks'])
+run 'rm app/assets/javascripts/application.js'
+run 'touch \'app/assets/javascripts/application.js\''
+File.open('app/assets/javascripts/application.js', 'w') { |file| file.write(scripts) }
