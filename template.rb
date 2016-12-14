@@ -13,7 +13,7 @@ run 'rm Gemfile'
 run 'touch \'Gemfile\''
 File.open('Gemfile', 'w') { |file| file.write(gems) }
 
-gem 'haml'
+gem 'haml-rails'
 gem_group :production do
   gem 'pg'
 end
@@ -40,6 +40,7 @@ if yes?('Add devise?(yes/no)')
   rails_command 'db:migrate'
   generate 'devise:views'
 end
+rails_command 'haml:erb2haml'
 
 scripts = remove_lines('app/assets/javascripts/application.js', ['turbolinks'])
 run 'rm app/assets/javascripts/application.js'
