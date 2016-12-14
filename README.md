@@ -11,3 +11,9 @@ Las gemas que agrega:
 * gem 'rubocop'
 
 La gema 'devise' es opcional. Al iniciar la aplicación, se le preguntará si desea agregarla o no
+
+## Uso
+Para generar una nueva aplicación usando este template, debe pasar la opción `-m` a `rails new`, como:
+```
+rails new example -m https://raw.githubusercontent.com/devacademyla/rodolfo/master/template.rb
+```
