@@ -22,6 +22,7 @@ gem_group :development, :test do
   gem 'sqlite3'
   gem 'rspec-rails'
   gem 'factory_girl_rails'
+  gem 'eslint-rails'
   gem 'database_cleaner'
   gem 'shoulda-matchers'
   gem 'rubocop'
@@ -30,6 +31,7 @@ end
 run 'rm -rf test'
 run 'bundle install'
 generate 'rspec:install'
+rails_command 'eslint:print_config'
 
 run 'rm spec/rails_helper.rb'
 run 'rm spec/spec_helper.rb'
