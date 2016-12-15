@@ -25,10 +25,16 @@ gem_group :development, :test do
   gem 'database_cleaner'
   gem 'shoulda-matchers'
   gem 'rubocop'
+  gem 'simplecov'
 end
 run 'rm -rf test'
 run 'bundle install'
 generate 'rspec:install'
+
+run 'rm spec/rails_helper.rb'
+run 'rm spec/spec_helper.rb'
+run 'touch \'spec/spec_helper.rb\''
+
 if yes?('Add devise?(yes/no)')
   gem 'devise'
   run 'bundle install'
@@ -39,7 +45,20 @@ if yes?('Add devise?(yes/no)')
   generate :devise, [class_name, params].join(' ')
   rails_command 'db:migrate'
   generate 'devise:views'
+  file = File.open(File.expand_path(File.join(File.dirname(__FILE__))) +'/spec_devise_helper.rb', 'rb')
+  spec_helper = file.read
+  File.open('spec/spec_helper.rb', 'w') { |file| file.write(spec_helper) }
+else
+  file = File.open(File.expand_path(File.join(File.dirname(__FILE__))) +'/spec_helper.rb', 'rb')
+  spec_helper = file.read
+  File.open('spec/spec_helper.rb', 'w') { |file| file.write(spec_helper) }
 end
+
+run 'touch \'.rubocop.yml\''
+file = File.open(File.expand_path(File.join(File.dirname(__FILE__))) +'/rubocop.yml', 'rb')
+rubocop = file.read
+File.open('.rubocop.yml', 'w') { |file| file.write(rubocop) }
+
 rails_command 'haml:erb2haml'
 
 scripts = remove_lines('app/assets/javascripts/application.js', ['turbolinks'])
