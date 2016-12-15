@@ -61,6 +61,11 @@ file = File.open(File.expand_path(File.join(File.dirname(__FILE__))) +'/rubocop.
 rubocop = file.read
 File.open('.rubocop.yml', 'w') { |file| file.write(rubocop) }
 
+run 'touch \'.travis.yml\''
+file = File.open(File.expand_path(File.join(File.dirname(__FILE__))) +'/travis.yml', 'rb')
+travis = file.read
+File.open('.travis.yml', 'w') { |file| file.write(travis) }
+
 rails_command 'haml:erb2haml'
 
 scripts = remove_lines('app/assets/javascripts/application.js', ['turbolinks'])

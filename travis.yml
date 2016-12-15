@@ -1,0 +1,10 @@
+language: ruby
+rvm:
+  - 2.3.1
+cache: bundler
+before_script:
+- bundle exec rake db:schema:load RAILS_ENV=test
+script:
+- bundle exec rspec
+- bundle exec rubocop
+- bundle exec rake eslint:run
