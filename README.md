@@ -1,4 +1,6 @@
 # Rodolfo
+Template para crear una aplicación en rails 5. La mayoría de aplicaciones desarrolladas en devAcademy tienen algunas configuraciones para el entorno de desarollo y de testing, por ello creamos nuestro propio template.
+
 ## Gemfile
 Las gemas que agrega:
 * gem 'haml'
