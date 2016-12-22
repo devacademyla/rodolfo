@@ -29,10 +29,15 @@ def update_file(original_file, words)
   File.open(original_file, 'w') { |file| file.write(new_file) }
 end
 
+# Questions
+add_devise = yes?('Add devise?(yes/no)')
+add_yasmine = yes?('Add yasmine?(yes/no)')
+
 # Change Gemfile
 update_file('Gemfile', ['sqlite3', 'turbolinks'])
 
 gem 'haml-rails'
+gem 'devise' if add_devise
 gem_group :production do
   gem 'pg'
 end
@@ -46,11 +51,18 @@ gem_group :development, :test do
   gem 'shoulda-matchers'
   gem 'rubocop'
   gem 'simplecov'
+  gem 'jasmine' if add_yasmine
 end
 run 'bundle install'
 
 # Run eslint config
 rails_command 'eslint:print_config'
+
+# OPTIONAL: Run jasmine config
+if add_yasmine
+  generate 'jasmine:install'
+  generate 'jasmine:examples'
+end
 
 # Change test to spec
 run 'rm -rf test'
@@ -60,9 +72,7 @@ run 'rm spec/spec_helper.rb'
 run 'touch \'spec/spec_helper.rb\''
 
 # OPTIONAL: Add devise
-if yes?('Add devise?(yes/no)')
-  gem 'devise'
-  run 'bundle install'
+if add_devise
   generate 'devise:install'
   environment 'config.action_mailer.default_url_options = { host: \'localhost\', port: 3000 }', env: 'development'
   class_name = ask('Model name (e.g. User):')
