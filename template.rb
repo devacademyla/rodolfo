@@ -55,22 +55,6 @@ gem_group :development, :test do
 end
 run 'bundle install'
 
-# Run eslint config
-rails_command 'eslint:print_config'
-
-# OPTIONAL: Run jasmine config
-if add_yasmine
-  generate 'jasmine:install'
-  generate 'jasmine:examples'
-end
-
-# Change test to spec
-run 'rm -rf test'
-generate 'rspec:install'
-run 'rm spec/rails_helper.rb'
-run 'rm spec/spec_helper.rb'
-run 'touch \'spec/spec_helper.rb\''
-
 # OPTIONAL: Add devise
 if add_devise
   generate 'devise:install'
@@ -84,7 +68,12 @@ else
   spec_file = open(raw_github + 'spec_helper.rb')
 end
 
-# Update spec_helper
+# Change test to spec
+run 'rm -rf test'
+generate 'rspec:install'
+run 'rm spec/rails_helper.rb'
+run 'rm spec/spec_helper.rb'
+run 'touch \'spec/spec_helper.rb\''
 copy_file('spec/spec_helper', spec_file)
 
 # Update rubocop config
@@ -102,3 +91,13 @@ rails_command 'haml:erb2haml'
 
 # Remove turbolinks from application.js
 update_file('app/assets/javascripts/application.js', ['turbolinks'])
+
+# Run eslint config
+rails_command 'eslint:print_config'
+
+# OPTIONAL: Run jasmine config
+if add_yasmine
+  generate 'jasmine:install'
+  generate 'jasmine:examples'
+  File.open('.travis.yml', 'a') { |file| file.write '- bundle exec rake jasmine:ci' }
+end
